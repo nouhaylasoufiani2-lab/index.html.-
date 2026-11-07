@@ -38,13 +38,48 @@ footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid va
 const data={
 ar:{pill:"منصة أدوات الذكاء الاصطناعي",headline:'أفكارك تستحق أن تصبح <span class="gradient">واقعاً</span>',lead:"اكتب، سوّق، ترجم وطوّر مشروعك باستخدام أدوات ذكية في مكان واحد.",start:"ابدأ الآن مجاناً",explore:"اكتشف الأدوات",toolsTitle:"أدواتك الذكية",toolsSub:"اختر أداة للبدء",workTitle:"جرّب أداة الكتابة",workSub:"اكتب طلبك وحدد اللغة، ثم أنشئ مسودة أولية.",promptLabel:"ماذا تريد أن تنشئ؟",placeholder:"مثلاً: اكتب إعلاناً جذاباً لمتجر يبيع العطور...",resultLabel:"النتيجة التجريبية",generate:"أنشئ مسودة",copy:"نسخ النتيجة",notice:"هذه نسخة أولية للواجهة. التوليد الحالي تجريبي بقوالب محلية وليس اتصالاً بنموذج ذكاء اصطناعي. لتفعيل AI الحقيقي سنربط الموقع بواجهة API آمنة في خطوة لاحقة.",foot:"نسخة أولية قابلة للتطوير",empty:"اكتب وصفاً قصيراً لما تحتاجه أولاً.",copied:"تم النسخ!",tools:[["✍️","كتابة الإعلانات","أنشئ نصوصاً تسويقية جذابة."],["🛍️","وصف المنتجات","اعرض منتجاتك بطريقة احترافية."],["📱","منشورات التواصل","أفكار ومنشورات للسوشيال ميديا."],["🌍","الترجمة","جهّز نصوصك بلغات مختلفة."],["💼","رسائل احترافية","اكتب رسائل العمل والعملاء."],["💡","أفكار المشاريع","اكتشف أفكاراً لتطوير عملك."]]},
 en:{pill:"AI tools platform",headline:'Your ideas deserve to become <span class="gradient">reality</span>',lead:"Write, market, translate and grow your project with useful tools in one place.",start:"Start for free",explore:"Explore tools",toolsTitle:"Your AI tools",toolsSub:"Choose a tool to begin",workTitle:"Try the writing tool",workSub:"Enter a request, choose a language and create a starter draft.",promptLabel:"What would you like to create?",placeholder:"Example: Write an attractive ad for a perfume shop...",resultLabel:"Demo result",generate:"Create a draft",copy:"Copy result",notice:"This is an initial interface. Generation currently uses local demo templates, not a live AI model. We can connect a secure AI API in a later step.",foot:"Expandable starter version",empty:"Please enter a short description first.",copied:"Copied!",tools:[["✍️","Ad copy","Create engaging marketing text."],["🛍️","Product descriptions","Present products professionally."],["📱","Social posts","Ideas and posts for social media."],["🌍","Translation","Prepare text in different languages."],["💼","Business messages","Write professional messages."],["💡","Business ideas","Find ideas to grow your business."]]},
-fr:{pill:"Plateforme d’outils IA",headline:'Vos idées méritent de devenir <span class="gradient">réalité</span>',lead:"Rédigez, commercialisez, traduisez et développez votre projet au même endroit.",start:"Commencer gratuitement",explore:"Voir les outils",toolsTitle:"Vos outils IA",toolsSub:"Choisissez un outil",workTitle:"Essayez l’outil de rédaction",workSub:"Saisissez votre demande et choisissez une langue.",promptLabel:"Que souhaitez-vous créer ?",placeholder:"Exemple : rédiger une publicité pour une parfumerie...",resultLabel:"Résultat démo",generate:"Créer un brouillon",copy:"Copier le résultat",notice:"Version initiale de l’interface. La génération utilise des modèles locaux et non un véritable modèle IA. Une API IA sécurisée sera ajoutée à l’étape suivante.",foot:"Version initiale évolutive",empty:"Veuillez saisir une courte description.",copied:"Copié !",tools:[["✍️","Publicités","Créez des textes marketing."],["🛍️","Descriptions produits","Présentez vos produits."],["📱","Réseaux sociaux","Idées et publications sociales."],["🌍","Traduction","Préparez vos textes en plusieurs langues."],["💼","Messages pro","Rédigez des messages professionnels."],["💡","Idées de projets","Trouvez des idées pour votre activité."]]}
-};
-let current="ar";
-function render(){let d=data[current];document.documentElement.lang=current;document.documentElement.dir=current==="ar"?"rtl":"ltr";for(let id of ["pill","headline","lead","start","explore","toolsTitle","toolsSub","workTitle","workSub","promptLabel","resultLabel","generate","copy","notice","foot"])document.getElementById(id).innerHTML=d[id];document.getElementById("prompt").placeholder=d.placeholder;document.getElementById("cards").innerHTML=d.tools.map((x,i)=>`<div class="card" onclick="choose(${i})"><div class="ico">${x[0]}</div><h3>${x[1]}</h3><p>${x[2]}</p></div>`).join("");}
-function choose(i){let keys=["ad","product","post","translate","email","ideas"];document.getElementById("tool").value=keys[i];document.getElementById("workspace").scrollIntoView({behavior:"smooth"});}
-document.getElementById("lang").addEventListener("change",e=>{current=e.target.value;render()});
-document.getElementById("generate").onclick=()=>{let p=document.getElementById("prompt").value.trim(),t=document.getElementById("tool").value,l=document.getElementById("outputLang").value;if(!p){document.getElementById("result").textContent=data[current].empty;return;}let names={ad:{ar:"إعلان تسويقي",fr:"Publicité",en:"Marketing ad"},product:{ar:"وصف المنتج",fr:"Description du produit",en:"Product description"},post:{ar:"منشور اجتماعي",fr:"Publication sociale",en:"Social post"},email:{ar:"رسالة احترافية",fr:"Message professionnel",en:"Professional message"},ideas:{ar:"أفكار أولية",fr:"Premières idées",en:"Starter ideas"},translate:{ar:"ترجمة",fr:"Traduction",en:"Translation"}};let intro={ar:"مسودة تجريبية — راجعها وعدّلها قبل النشر.",fr:"Brouillon de démonstration — relisez-le avant publication.",en:"Demo draft — review and edit before publishing."};let result=l==="ar"?`✨ ${names[t].ar}\n\n${p}\n\n${intro.ar}\n\n• ابدأ برسالة واضحة.\n• اذكر الفائدة التي يحصل عليها العميل.\n• أضف دعوة لاتخاذ إجراء.`:l==="fr"?`✨ ${names[t].fr}\n\n${p}\n\n${intro.fr}\n\n• Présentez clairement votre offre.\n• Mettez en avant le bénéfice client.\n• Terminez par un appel à l’action.`:`✨ ${names[t].en}\n\n${p}\n\n${intro.en}\n\n• State your offer clearly.\n• Highlight the customer benefit.\n• End with a clear call to action.`;document.getElementById("result").textContent=result;};
-document.getElementById("copy").onclick=async()=>{let s=document.getElementById("result").textContent;try{await navigator.clipboard.writeText(s);document.getElementById("copy").textContent=data[current].copied;setTimeout(()=>document.getElementById("copy").textContent=data[current].copy,1600)}catch(e){document.getElementById("result").focus()}};
-render();
+fr:{pill:"Plateforme d’outils IA",headline:'Vos idées méritent de devenir <span class="gradient">réalité</span>',lead:"Rédigez, commercialisez, traduisez et développez votre projet au même endroit.",start:"Commencer gratuitement",explore:"Voir les outils",toolsTitle:"Vos outils IA",toolsSub:"Choisissez un outil",workTitle:"Essayez l’outil de rédaction",workSub:"Saisissez votre demande et choisissez une langue.",promptLabel:"Que souhaitez-vous créer ?",placeholder:"Exemple : rédiger une publicité pour une parfumerie...",resultLabel:"Résultat démo",generate:"Créer un brouillon",copy:"Copier le résultat",notice:"Version initiale de l’interface. La génération utilise des modèles locaux et non un véritable modèle IA. Une API IA sécurisée sera ajoutée à l’étape suivante.",foot:"Version initiale évolutive",empty:"Veuillez saisir une courte description.",copied:"Copié !",tools:[["✍️","Publicités","Créez des textes marketing."],["🛍️","Descriptions produits","Présentez vos produits."],["📱","Réseaux sociaux","Idées et publications sociales."],["🌍","Traduction","Préparez vos textes en plusieurs langues."],["💼","Messages pro","Rédigez des messages ,"post","translate","email","ing").addEventListener("change",e=>{current=e.target.value;render()})enerate").onclick=()=>{let p=document.getElementById("prompt").value.trim(),t=document.getElementById("tool").value,l=document.getElementById("outputLang").value;if(!p){document.getElementById("result").textContent=data[current].empty;return;}let names={ad:{ar:"إعلان تسويقي",fr:"Publicité",en:"Marketing ad"},product:{ar:"وصف المنتج",fr:"Description du produit",en:"Product description"},post:{ar:"منشور اجتماعي",fr:"Publication sociale",en:"Social post"},email:{ar:"رسالة احترافية",fr:"Message professionnel",en:"Professional message"},ideas:{ar:"أفكار أولية",fr:"Premières idées",en:"Starter ideas"},translate:{ar:"ترجمة",fr:"Traduction",en:"Translation"}};let intro={ar:"مسودة تجريبية — راجعها وعدّلها قبل النشر.",fr:"Brouillon de démonstration — relisez-le avant publication.",en:"Demo draft — review and edit before publishing."};let result=l==="ar"?`✨ ${names[t].ar}\n\n${p}\n\n${intro.ar}\n\n• ابدأ برسالة واضحة.\n• اذكر الفائدة التي يحصل عليها العميل.\n• أضف دعوة لاتخاذ إجراء.`:l==="fr"?`✨ ${names[t].fr}\n\n${p}\n\n${intro.fr}\n\n• Présentez clairement votre offre.\n• 
 </script></body></html>
+document.getElementById("generate").onclick = async () => {
+  const prompt = document.getElementById("prompt").value.trim();
+  const tool = document.getElementById("tool").value;
+  const lang = document.getElementById("outputLang").value;
+  const result = document.getElementById("result");
+  const button = document.getElementById("generate");
+
+  if (!prompt) {
+    result.textContent = "Please enter your request.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "AI is working...";
+  result.textContent = "Connecting to Gemini...";
+
+  try {
+    const response = await fetch(
+      "https://smart-ai-engine.nouhaylasoufiani2.workers.dev",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: `Task: ${tool}. User request: ${prompt}. Answer in language: ${lang}.`
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI connection failed");
+    }
+
+    result.textContent = data.answer || "No answer received.";
+
+  } catch (error) {
+    result.textContent = "Error: " + error.message;
+  } finally {
+    button.disabled = false;
+    button.textContent = "أنشئ مسودة";
+  }
+};
